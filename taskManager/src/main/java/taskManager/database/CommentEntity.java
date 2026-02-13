@@ -1,6 +1,6 @@
 package taskManager.database;
 
-
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,14 +18,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "project_users",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                    columnNames = {"user_id", "project_id"}
-                )
-            })
+@Table(name = "comments")
 @Entity
-public class ProjectUsersEntity {
+public class CommentEntity {
     
     
     @Id
@@ -35,12 +29,21 @@ public class ProjectUsersEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id",nullable=false)
-    private UserEntity user;
+    @JoinColumn(name = "task_id",nullable=false)
+    private TaskEntity task;
+
+    @Column(name = "message",nullable=false)
+    private String message;
 
     @ManyToOne
-    @JoinColumn(name="project_id",nullable=false)
-    private ProjectEntity project;
+    @JoinColumn(name = "user_id",nullable=false)
+    private UserEntity user;
+
+    @Column(name = "send_time",nullable=false)
+    private LocalDateTime sendTime;
     
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
 }
