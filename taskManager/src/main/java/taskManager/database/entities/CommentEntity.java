@@ -39,11 +39,7 @@ public class CommentEntity {
     @JoinColumn(name = "user_id",nullable=false)
     private UserEntity user;
 
-    @Column(name = "send_time",nullable=false)
+    @Column(name = "send_time",nullable=false,updatable=false)
     private LocalDateTime sendTime;
     
-
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
 }

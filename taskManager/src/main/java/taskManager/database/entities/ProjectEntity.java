@@ -1,4 +1,4 @@
-package taskManager.database;
+package taskManager.database.entities;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,9 +38,6 @@ public class ProjectEntity {
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "status")
-    private ProjectStatus status;
 
     @ManyToOne
     @JoinColumn(name = "owner_id",nullable=false)
