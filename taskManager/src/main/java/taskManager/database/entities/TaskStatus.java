@@ -1,5 +1,7 @@
-package taskManager.database;
+package taskManager.database.entities;
 
 public enum TaskStatus {
-    SOME_STATUSES
+    IN_PROCESS,
+    ON_REVIEW,
+    DONE
 }

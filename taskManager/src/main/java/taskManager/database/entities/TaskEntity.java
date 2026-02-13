@@ -1,4 +1,4 @@
-package taskManager.database;
+package taskManager.database.entities;
 
 
 import java.time.LocalDate;

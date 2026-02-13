@@ -1,5 +1,8 @@
-package taskManager.database;
+package taskManager.database.entities;
 
 public enum TaskPriority {
-    SOME_PRIORITIES
+    LOW,
+    MEDIUM,
+    HIGH,
+    CRUCIAL
 }
