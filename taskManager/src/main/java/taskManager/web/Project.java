@@ -1,4 +1,4 @@
-package taskManager;
+package taskManager.web;
 
 import java.time.LocalDateTime;
 

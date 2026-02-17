@@ -2,8 +2,8 @@ package taskManager.mapper;
 
 import org.mapstruct.Mapper;
 
-import taskManager.User;
 import taskManager.database.entities.UserEntity;
+import taskManager.web.User;
 
 
 @Mapper(componentModel = "spring") 

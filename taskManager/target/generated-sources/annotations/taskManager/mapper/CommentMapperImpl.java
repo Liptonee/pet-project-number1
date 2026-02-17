@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import taskManager.Comment;
-import taskManager.Task;
-import taskManager.User;
 import taskManager.database.entities.CommentEntity;
+import taskManager.web.Comment;
+import taskManager.web.Task;
+import taskManager.web.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-16T20:04:26+0700",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
+    date = "2026-02-17T18:59:51+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class CommentMapperImpl implements CommentMapper {
@@ -54,10 +54,10 @@ public class CommentMapperImpl implements CommentMapper {
         CommentEntity commentEntity = new CommentEntity();
 
         commentEntity.setId( dto.id() );
-        commentEntity.setTask( taskMapper.toEntity( dto.task() ) );
         commentEntity.setMessage( dto.message() );
-        commentEntity.setUser( userMapper.toEntity( dto.user() ) );
         commentEntity.setSendTime( dto.sendTime() );
+        commentEntity.setTask( taskMapper.toEntity( dto.task() ) );
+        commentEntity.setUser( userMapper.toEntity( dto.user() ) );
 
         return commentEntity;
     }

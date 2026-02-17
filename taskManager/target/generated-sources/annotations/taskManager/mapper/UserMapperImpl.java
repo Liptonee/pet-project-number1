@@ -2,13 +2,13 @@ package taskManager.mapper;
 
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
-import taskManager.User;
 import taskManager.database.entities.UserEntity;
+import taskManager.web.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-16T20:05:55+0700",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
+    date = "2026-02-17T18:59:51+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -42,8 +42,8 @@ public class UserMapperImpl implements UserMapper {
 
         UserEntity userEntity = new UserEntity();
 
-        userEntity.setId( dto.id() );
         userEntity.setEmail( dto.email() );
+        userEntity.setId( dto.id() );
         userEntity.setPassword( dto.password() );
         userEntity.setUsername( dto.username() );
 
