@@ -42,7 +42,8 @@ public class AppService {
 
 
     public User createUser(User user) {
-        return null;
+        var createdEntity = userRepository.save(userMapper.toEntity(user));
+        return userMapper.toDto(createdEntity);
     }
     
 }

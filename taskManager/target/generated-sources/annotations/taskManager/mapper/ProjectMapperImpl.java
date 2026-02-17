@@ -10,7 +10,7 @@ import taskManager.database.entities.ProjectEntity;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-16T17:57:24+0700",
+    date = "2026-02-16T20:04:26+0700",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
