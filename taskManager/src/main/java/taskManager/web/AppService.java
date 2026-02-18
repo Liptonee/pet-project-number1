@@ -2,6 +2,7 @@ package taskManager.web;
 
 import org.springframework.stereotype.Service;
 
+import taskManager.database.entities.UserEntity;
 import taskManager.database.repositories.ProjectRepository;
 import taskManager.database.repositories.TaskRepository;
 import taskManager.database.repositories.UserRepository;
@@ -42,8 +43,20 @@ public class AppService {
 
 
     public User createUser(User user) {
-        var createdEntity = userRepository.save(userMapper.toEntity(user));
-        return userMapper.toDto(createdEntity);
+        if (userRepository.findByUsername(user.username()).isPresent()){
+            throw new IllegalArgumentException("Username already exists");
+        }
+        if (userRepository.findByEmail(user.email()).isPresent()){
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        UserEntity entity = userMapper.toEntity(user);
+
+        var saved = userRepository.save(entity);
+
+        return userMapper.toDto(saved);
     }
     
+    
+
 }
