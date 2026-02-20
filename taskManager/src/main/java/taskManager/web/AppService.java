@@ -10,6 +10,8 @@ import taskManager.mapper.CommentMapper;
 import taskManager.mapper.ProjectMapper;
 import taskManager.mapper.TaskMapper;
 import taskManager.mapper.UserMapper;
+import taskManager.web.dto.User;
+import taskManager.web.dto.UserResponse;
 
 @Service
 public class AppService {
@@ -42,21 +44,22 @@ public class AppService {
 
 
 
-    public User createUser(User user) {
-        if (userRepository.findByUsername(user.username()).isPresent()){
+    public UserResponse createUser(User userRequest) {
+
+        UserEntity userEntity = userMapper.toEntity(userRequest);
+
+        if (userRepository.existsByUsername(userEntity.getUsername())){
             throw new IllegalArgumentException("Username already exists");
         }
-        if (userRepository.findByEmail(user.email()).isPresent()){
+        if (userRepository.existsByEmail(userEntity.getEmail())){
             throw new IllegalArgumentException("Email already exists");
         }
 
-        UserEntity entity = userMapper.toEntity(user);
+        UserEntity saved = userRepository.save(userEntity);
 
-        var saved = userRepository.save(entity);
-
-        return userMapper.toDto(saved);
+        return userMapper.toResponse(saved);
     }
-    
-    
+
 
 }
+

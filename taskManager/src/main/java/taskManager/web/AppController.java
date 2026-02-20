@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import taskManager.web.dto.User;
+import taskManager.web.dto.UserResponse;
 
 
 @RestController
@@ -21,11 +23,22 @@ public class AppController {
 
 
     @PostMapping("/registration")
-    public ResponseEntity<User> getMethodName(@Valid @RequestBody User userToCreate) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody User request) {
+
+        UserResponse response = appService.createUser(request);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                            .body(appService.createUser(userToCreate));
+                            .body(response);
     }
     
     
+    // @PostMapping("/{userId}/project")
+    // public ResponseEntity<Project> createProject
+    // (                                          @Valid @RequestBody Project projectToCreate,
+    //                                             @PathVariable("userId") Long userId
+    // ){
 
+    //     return ResponseEntity.status(HttpStatus.CREATED)
+    //                         .body(appService.createProject(projectToCreate, userId));    
+    // }
 }   

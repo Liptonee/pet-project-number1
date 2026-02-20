@@ -1,15 +1,11 @@
-package taskManager.web;
+package taskManager.web.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record User(
-    @Null
-    Long id,
-
     @NotBlank(message="email cant be empty")
     @Email
     String email,

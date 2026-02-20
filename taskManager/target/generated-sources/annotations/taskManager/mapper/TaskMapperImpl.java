@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import taskManager.database.entities.TaskEntity;
 import taskManager.database.entities.TaskPriority;
 import taskManager.database.entities.TaskStatus;
-import taskManager.web.Task;
+import taskManager.web.dto.Task;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-18T20:46:14+0700",
+    date = "2026-02-20T13:09:12+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
@@ -22,21 +22,19 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
-        Long id = null;
         String name = null;
         String description = null;
         TaskStatus status = null;
         LocalDate deadline = null;
         TaskPriority priority = null;
 
-        id = entity.getId();
         name = entity.getName();
         description = entity.getDescription();
         status = entity.getStatus();
         deadline = entity.getDeadline();
         priority = entity.getPriority();
 
-        Task task = new Task( id, name, description, status, deadline, priority );
+        Task task = new Task( name, description, status, deadline, priority );
 
         return task;
     }
@@ -49,12 +47,11 @@ public class TaskMapperImpl implements TaskMapper {
 
         TaskEntity taskEntity = new TaskEntity();
 
-        taskEntity.setDeadline( dto.deadline() );
-        taskEntity.setDescription( dto.description() );
-        taskEntity.setId( dto.id() );
         taskEntity.setName( dto.name() );
-        taskEntity.setPriority( dto.priority() );
+        taskEntity.setDescription( dto.description() );
         taskEntity.setStatus( dto.status() );
+        taskEntity.setDeadline( dto.deadline() );
+        taskEntity.setPriority( dto.priority() );
 
         return taskEntity;
     }

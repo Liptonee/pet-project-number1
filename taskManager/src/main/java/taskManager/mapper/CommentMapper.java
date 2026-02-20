@@ -3,7 +3,7 @@ package taskManager.mapper;
 import org.mapstruct.Mapper;
 
 import taskManager.database.entities.CommentEntity;
-import taskManager.web.Comment;
+import taskManager.web.dto.Comment;
 
 
 @Mapper(componentModel = "spring",uses = {UserMapper.class,TaskMapper.class})

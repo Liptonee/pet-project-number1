@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import taskManager.database.entities.ProjectEntity;
-import taskManager.web.Project;
+import taskManager.web.dto.Project;
 
 @Mapper(componentModel = "spring",uses = {UserMapper.class})
 public interface ProjectMapper {

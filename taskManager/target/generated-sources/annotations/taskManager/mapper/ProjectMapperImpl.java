@@ -5,12 +5,12 @@ import javax.annotation.processing.Generated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import taskManager.database.entities.ProjectEntity;
-import taskManager.web.Project;
-import taskManager.web.User;
+import taskManager.web.dto.Project;
+import taskManager.web.dto.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-18T20:46:14+0700",
+    date = "2026-02-20T13:22:40+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
@@ -51,10 +51,10 @@ public class ProjectMapperImpl implements ProjectMapper {
         ProjectEntity projectEntity = new ProjectEntity();
 
         projectEntity.setOwner( userMapper.toEntity( dto.owner() ) );
-        projectEntity.setCreatedAt( dto.createdAt() );
-        projectEntity.setDescription( dto.description() );
         projectEntity.setId( dto.id() );
         projectEntity.setName( dto.name() );
+        projectEntity.setDescription( dto.description() );
+        projectEntity.setCreatedAt( dto.createdAt() );
 
         return projectEntity;
     }

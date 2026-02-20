@@ -3,11 +3,12 @@ package taskManager.mapper;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import taskManager.database.entities.UserEntity;
-import taskManager.web.User;
+import taskManager.web.dto.User;
+import taskManager.web.dto.UserResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-18T20:46:14+0700",
+    date = "2026-02-20T13:22:39+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
@@ -19,17 +20,15 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        Long id = null;
         String email = null;
         String password = null;
         String username = null;
 
-        id = entity.getId();
         email = entity.getEmail();
         password = entity.getPassword();
         username = entity.getUsername();
 
-        User user = new User( id, email, password, username );
+        User user = new User( email, password, username );
 
         return user;
     }
@@ -43,10 +42,28 @@ public class UserMapperImpl implements UserMapper {
         UserEntity userEntity = new UserEntity();
 
         userEntity.setEmail( dto.email() );
-        userEntity.setId( dto.id() );
         userEntity.setPassword( dto.password() );
         userEntity.setUsername( dto.username() );
 
         return userEntity;
+    }
+
+    @Override
+    public UserResponse toResponse(UserEntity entity) {
+        if ( entity == null ) {
+            return null;
+        }
+
+        Long id = null;
+        String email = null;
+        String username = null;
+
+        id = entity.getId();
+        email = entity.getEmail();
+        username = entity.getUsername();
+
+        UserResponse userResponse = new UserResponse( id, email, username );
+
+        return userResponse;
     }
 }
