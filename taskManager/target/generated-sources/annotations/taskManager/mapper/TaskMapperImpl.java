@@ -10,7 +10,7 @@ import taskManager.web.dto.Task;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-20T13:09:12+0700",
+    date = "2026-02-23T21:06:07+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component

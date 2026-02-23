@@ -11,17 +11,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@ToString(exclude = {"commentsList", "executorsList"})
 @Table(name = "tasks")
 @Entity
 public class TaskEntity {
@@ -47,15 +53,20 @@ public class TaskEntity {
     @Column(name = "priority")
     private TaskPriority priority;
 
+    @ManyToOne
+    @JoinColumn(name="project_id", referencedColumnName="id", nullable=false)//педираст.абсермссретвике в рот 
+    private ProjectEntity project;//в огромных колвах и не вытирает жопу
+    //      евреенко писилий засранович
+
 
     @OneToMany(mappedBy="task")
-    private List<ProjectTasksEntity> projects = new ArrayList<>();
+    private List<CommentEntity> commentsList = new ArrayList<>();
 
-    @OneToMany(mappedBy="task")
-    private List<UserTasksEntity> executors = new ArrayList<>();
-
-    @OneToMany(mappedBy="task")
-    private List<CommentEntity> comments = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name="user_tasks",
+                joinColumns=@JoinColumn(name="task_id",referencedColumnName="id"),
+                inverseJoinColumns=@JoinColumn(name="user_id",referencedColumnName="id"))
+    private List<UserEntity> executorsList = new ArrayList<>();
 
 
     @Column(name = "created_at", updatable = false)

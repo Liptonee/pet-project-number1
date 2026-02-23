@@ -2,44 +2,41 @@ package taskManager.mapper;
 
 import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import taskManager.database.entities.ProjectEntity;
+import taskManager.database.entities.UserEntity;
 import taskManager.web.dto.Project;
-import taskManager.web.dto.User;
+import taskManager.web.dto.ProjectResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-20T13:22:40+0700",
+    date = "2026-02-23T21:05:18+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class ProjectMapperImpl implements ProjectMapper {
 
-    @Autowired
-    private UserMapper userMapper;
-
     @Override
-    public Project toDto(ProjectEntity entity) {
+    public ProjectResponse toResponse(ProjectEntity entity) {
         if ( entity == null ) {
             return null;
         }
 
-        User owner = null;
+        Long owner_id = null;
         Long id = null;
         String name = null;
         String description = null;
         LocalDateTime createdAt = null;
 
-        owner = userMapper.toDto( entity.getOwner() );
+        owner_id = entityOwnerId( entity );
         id = entity.getId();
         name = entity.getName();
         description = entity.getDescription();
         createdAt = entity.getCreatedAt();
 
-        Project project = new Project( id, name, description, owner, createdAt );
+        ProjectResponse projectResponse = new ProjectResponse( id, name, description, owner_id, createdAt );
 
-        return project;
+        return projectResponse;
     }
 
     @Override
@@ -50,12 +47,17 @@ public class ProjectMapperImpl implements ProjectMapper {
 
         ProjectEntity projectEntity = new ProjectEntity();
 
-        projectEntity.setOwner( userMapper.toEntity( dto.owner() ) );
-        projectEntity.setId( dto.id() );
         projectEntity.setName( dto.name() );
         projectEntity.setDescription( dto.description() );
-        projectEntity.setCreatedAt( dto.createdAt() );
 
         return projectEntity;
+    }
+
+    private Long entityOwnerId(ProjectEntity projectEntity) {
+        UserEntity owner = projectEntity.getOwner();
+        if ( owner == null ) {
+            return null;
+        }
+        return owner.getId();
     }
 }

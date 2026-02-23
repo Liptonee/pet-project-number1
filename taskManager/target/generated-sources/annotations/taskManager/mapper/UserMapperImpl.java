@@ -8,30 +8,11 @@ import taskManager.web.dto.UserResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-20T13:22:39+0700",
+    date = "2026-02-23T21:01:57+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
-
-    @Override
-    public User toDto(UserEntity entity) {
-        if ( entity == null ) {
-            return null;
-        }
-
-        String email = null;
-        String password = null;
-        String username = null;
-
-        email = entity.getEmail();
-        password = entity.getPassword();
-        username = entity.getUsername();
-
-        User user = new User( email, password, username );
-
-        return user;
-    }
 
     @Override
     public UserEntity toEntity(User dto) {

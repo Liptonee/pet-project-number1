@@ -33,12 +33,14 @@ public class AppController {
     
     
     // @PostMapping("/{userId}/project")
-    // public ResponseEntity<Project> createProject
-    // (                                          @Valid @RequestBody Project projectToCreate,
+    // public ResponseEntity<ProjectResponse> createProject
+    // (                                          @Valid @RequestBody Project request,
     //                                             @PathVariable("userId") Long userId
     // ){
 
+    //     ProjectResponse response = appService.createProject(request,userId);
+
     //     return ResponseEntity.status(HttpStatus.CREATED)
-    //                         .body(appService.createProject(projectToCreate, userId));    
+    //                          .body(response);    
     // }
 }   

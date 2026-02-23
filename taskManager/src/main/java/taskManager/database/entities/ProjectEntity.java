@@ -10,18 +10,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@ToString(exclude = {"tasksList", "membersList"})
 @Table(name = "projects")
 @Entity
 public class ProjectEntity {
@@ -39,16 +42,19 @@ public class ProjectEntity {
     @Column(name = "description")
     private String description;
 
+    
     @ManyToOne
-    @JoinColumn(name = "owner_id",nullable=false)
+    @JoinColumn(name = "owner_id",referencedColumnName="id",nullable=false)
     private UserEntity owner;
+
+
+    @ManyToMany(mappedBy="participatedProjectsList")
+    private List<UserEntity> membersList = new ArrayList<>();
 
     
     @OneToMany(mappedBy="project")
-    private List<ProjectTasksEntity> tasks = new ArrayList<>();
+    private List<TaskEntity> tasksList = new ArrayList<>();
 
-    @OneToMany(mappedBy="project")
-    private List<ProjectUsersEntity> members = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

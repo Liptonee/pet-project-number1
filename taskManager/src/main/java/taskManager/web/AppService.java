@@ -2,6 +2,7 @@ package taskManager.web;
 
 import org.springframework.stereotype.Service;
 
+import taskManager.database.entities.ProjectEntity;
 import taskManager.database.entities.UserEntity;
 import taskManager.database.repositories.ProjectRepository;
 import taskManager.database.repositories.TaskRepository;
@@ -10,6 +11,8 @@ import taskManager.mapper.CommentMapper;
 import taskManager.mapper.ProjectMapper;
 import taskManager.mapper.TaskMapper;
 import taskManager.mapper.UserMapper;
+import taskManager.web.dto.Project;
+import taskManager.web.dto.ProjectResponse;
 import taskManager.web.dto.User;
 import taskManager.web.dto.UserResponse;
 
@@ -59,6 +62,24 @@ public class AppService {
 
         return userMapper.toResponse(saved);
     }
+
+
+    // public ProjectResponse createProject(Project request, Long userId){
+        
+    //     ProjectEntity projectEntity = projectMapper.toEntity(request);
+
+    //     UserEntity userEntity = userRepository.findById(userId).get();
+
+    //     if (userEntity.getProjects().contains(projectEntity.getName())){
+    //         throw new IllegalArgumentException("Name of project already exists");
+    //     }
+
+    //     projectEntity.
+
+    //     ProjectEntity saved = projectRepository.save(projectEntity);
+
+    //     return projectMapper.toResponse(saved);
+    // }
 
 
 }
