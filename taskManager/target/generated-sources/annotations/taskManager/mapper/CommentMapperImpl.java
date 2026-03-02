@@ -1,49 +1,40 @@
 package taskManager.mapper;
 
-import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import taskManager.database.entities.CommentEntity;
+import taskManager.database.entities.TaskEntity;
 import taskManager.database.entities.UserEntity;
 import taskManager.web.dto.Comment;
-import taskManager.web.dto.Task;
-import taskManager.web.dto.User;
+import taskManager.web.dto.CommentResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-23T21:06:15+0700",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
+    date = "2026-03-02T16:54:43+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class CommentMapperImpl implements CommentMapper {
 
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private TaskMapper taskMapper;
-
     @Override
-    public Comment toDto(CommentEntity entity) {
+    public CommentResponse toResponse(CommentEntity entity) {
         if ( entity == null ) {
             return null;
         }
 
+        Long user_id = null;
+        Long task_id = null;
         Long id = null;
-        Task task = null;
         String message = null;
-        User user = null;
-        LocalDateTime sendTime = null;
 
+        user_id = entityUserId( entity );
+        task_id = entityTaskId( entity );
         id = entity.getId();
-        task = taskMapper.toDto( entity.getTask() );
         message = entity.getMessage();
-        user = userEntityToUser( entity.getUser() );
-        sendTime = entity.getSendTime();
 
-        Comment comment = new Comment( id, task, message, user, sendTime );
+        CommentResponse commentResponse = new CommentResponse( id, message, user_id, task_id );
 
-        return comment;
+        return commentResponse;
     }
 
     @Override
@@ -54,30 +45,24 @@ public class CommentMapperImpl implements CommentMapper {
 
         CommentEntity commentEntity = new CommentEntity();
 
-        commentEntity.setId( dto.id() );
         commentEntity.setMessage( dto.message() );
-        commentEntity.setUser( userMapper.toEntity( dto.user() ) );
-        commentEntity.setTask( taskMapper.toEntity( dto.task() ) );
-        commentEntity.setSendTime( dto.sendTime() );
 
         return commentEntity;
     }
 
-    protected User userEntityToUser(UserEntity userEntity) {
-        if ( userEntity == null ) {
+    private Long entityUserId(CommentEntity commentEntity) {
+        UserEntity user = commentEntity.getUser();
+        if ( user == null ) {
             return null;
         }
+        return user.getId();
+    }
 
-        String email = null;
-        String password = null;
-        String username = null;
-
-        email = userEntity.getEmail();
-        password = userEntity.getPassword();
-        username = userEntity.getUsername();
-
-        User user = new User( email, password, username );
-
-        return user;
+    private Long entityTaskId(CommentEntity commentEntity) {
+        TaskEntity task = commentEntity.getTask();
+        if ( task == null ) {
+            return null;
+        }
+        return task.getId();
     }
 }

@@ -8,5 +8,8 @@ import taskManager.database.entities.ProjectEntity;
 
 @Repository
 public interface  ProjectRepository extends JpaRepository<ProjectEntity, Long>{
-    
+    boolean existsByOwnerIdAndName(Long ownerId, String name);
+
+    boolean existsByOwnerIdAndId(Long ownerId, Long id);
+
 }

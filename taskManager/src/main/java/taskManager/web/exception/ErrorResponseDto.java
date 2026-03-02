@@ -1,4 +1,4 @@
-package taskManager.web.security.exception;
+package taskManager.web.exception;
 
 import java.time.LocalDateTime;
 

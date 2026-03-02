@@ -43,8 +43,7 @@ public class CommentEntity {
     @JoinColumn(name="task_id",referencedColumnName="id",nullable=false)
     private TaskEntity task;
     
-
-
+    
     @Column(name = "send_time",nullable=false,updatable=false)
     private LocalDateTime sendTime;
     

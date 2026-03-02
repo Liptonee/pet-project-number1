@@ -1,13 +1,14 @@
 package taskManager.database.entities;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,16 +42,18 @@ public class TaskEntity {
     @Column(name = "name",nullable=false)
     private String name;
 
-    @Column(name = "description",nullable=false)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status",nullable=false)
     private TaskStatus status;
 
     @Column(name = "deadline")
-    private LocalDate deadline;
+    private LocalDateTime deadline;
     
-    @Column(name = "priority")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority",nullable=false)
     private TaskPriority priority;
 
     @ManyToOne

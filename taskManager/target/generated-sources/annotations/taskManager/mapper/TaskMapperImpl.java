@@ -1,42 +1,48 @@
 package taskManager.mapper;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
+import taskManager.database.entities.ProjectEntity;
 import taskManager.database.entities.TaskEntity;
 import taskManager.database.entities.TaskPriority;
 import taskManager.database.entities.TaskStatus;
 import taskManager.web.dto.Task;
+import taskManager.web.dto.TaskResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-23T21:06:07+0700",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260128-0750, environment: Java 21.0.9 (Eclipse Adoptium)"
+    date = "2026-03-02T16:54:43+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class TaskMapperImpl implements TaskMapper {
 
     @Override
-    public Task toDto(TaskEntity entity) {
+    public TaskResponse toResponse(TaskEntity entity) {
         if ( entity == null ) {
             return null;
         }
 
+        Long project_id = null;
+        Long id = null;
         String name = null;
         String description = null;
         TaskStatus status = null;
-        LocalDate deadline = null;
         TaskPriority priority = null;
+        LocalDateTime deadline = null;
 
+        project_id = entityProjectId( entity );
+        id = entity.getId();
         name = entity.getName();
         description = entity.getDescription();
         status = entity.getStatus();
-        deadline = entity.getDeadline();
         priority = entity.getPriority();
+        deadline = entity.getDeadline();
 
-        Task task = new Task( name, description, status, deadline, priority );
+        TaskResponse taskResponse = new TaskResponse( id, name, description, status, priority, deadline, project_id );
 
-        return task;
+        return taskResponse;
     }
 
     @Override
@@ -47,12 +53,21 @@ public class TaskMapperImpl implements TaskMapper {
 
         TaskEntity taskEntity = new TaskEntity();
 
-        taskEntity.setName( dto.name() );
+        if ( dto.deadline() != null ) {
+            taskEntity.setDeadline( dto.deadline().atStartOfDay() );
+        }
         taskEntity.setDescription( dto.description() );
-        taskEntity.setStatus( dto.status() );
-        taskEntity.setDeadline( dto.deadline() );
+        taskEntity.setName( dto.name() );
         taskEntity.setPriority( dto.priority() );
 
         return taskEntity;
+    }
+
+    private Long entityProjectId(TaskEntity taskEntity) {
+        ProjectEntity project = taskEntity.getProject();
+        if ( project == null ) {
+            return null;
+        }
+        return project.getId();
     }
 }

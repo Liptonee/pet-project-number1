@@ -11,5 +11,7 @@ import taskManager.web.dto.UserResponse;
 public interface UserMapper{
     
     UserEntity toEntity(User dto);
+
+    
     UserResponse toResponse(UserEntity entity);
 }
