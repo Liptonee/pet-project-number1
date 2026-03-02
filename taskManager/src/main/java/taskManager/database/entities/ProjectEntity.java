@@ -48,8 +48,8 @@ public class ProjectEntity {
     private UserEntity owner;
 
 
-    @ManyToMany(mappedBy="participatedProjectsList")
-    private List<UserEntity> membersList = new ArrayList<>();
+        @ManyToMany(mappedBy="participatedProjectsList")
+        private List<UserEntity> membersList = new ArrayList<>();
 
     
     @OneToMany(mappedBy="project")

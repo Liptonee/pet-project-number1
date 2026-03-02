@@ -15,5 +15,6 @@ public interface CommentMapper {
     @Mapping(source="task.id",target="task_id")
     CommentResponse toResponse(CommentEntity entity);
 
+
     CommentEntity toEntity(Comment dto);
 }

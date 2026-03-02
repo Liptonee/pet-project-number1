@@ -45,6 +45,9 @@ public class CommentEntity {
     
     
     @Column(name = "send_time",nullable=false,updatable=false)
-    private LocalDateTime sendTime;
+    private LocalDateTime sendTime = LocalDateTime.now();
     
+
+
+
 }

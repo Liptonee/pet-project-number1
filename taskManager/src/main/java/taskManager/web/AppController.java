@@ -66,7 +66,7 @@ public class AppController {
     @PostMapping("/tasks/{taskId}/comments")
     public ResponseEntity<CommentResponse> createComment(
                                                    @AuthenticationPrincipal CustomUsersDetails currentUser,
-                                                   @PathVariable("taskid") Long taskId,
+                                                   @PathVariable("taskId") Long taskId,
                                                    @Valid @RequestBody Comment request) {
 
         CommentResponse response = appService.createComment(currentUser.user().getId(), taskId, request);

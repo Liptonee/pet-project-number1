@@ -118,9 +118,8 @@ public class AppService {
                                              .orElseThrow(
                                                 () -> new IllegalArgumentException("Task is not exist with id = " + taskId));
         
-        ProjectEntity project = projectRepository.findById(task.getProject().getId()).get();
 
-        if (!project.getMembersList().contains(user)){
+        if (!projectRepository.existsByProjectIdAndUserId(userId, userId)){
             throw new IllegalArgumentException("User is not member of project");
         }
 
