@@ -1,0 +1,16 @@
+package taskManager.database.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
+
+import taskManager.database.entity.CommentEntity;
+
+
+@Repository
+public interface  CommentRepository extends JpaRepository<CommentEntity, Long>,
+                                            JpaSpecificationExecutor<CommentEntity>{
+
+    boolean existsByCommentIdAndUserId(Long commentId, Long userId);
+
+}

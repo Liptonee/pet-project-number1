@@ -2,8 +2,8 @@ package taskManager.web.dto;
 
 import java.time.LocalDateTime;
 
-import taskManager.database.entities.TaskPriority;
-import taskManager.database.entities.TaskStatus;
+import taskManager.database.entity.TaskPriority;
+import taskManager.database.entity.TaskStatus;
 
 public record TaskResponse (
     Long id,

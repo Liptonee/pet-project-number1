@@ -3,14 +3,14 @@ package taskManager.mapper;
 import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
-import taskManager.database.entities.ProjectEntity;
-import taskManager.database.entities.UserEntity;
+import taskManager.database.entity.ProjectEntity;
+import taskManager.database.entity.UserEntity;
 import taskManager.web.dto.Project;
 import taskManager.web.dto.ProjectResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-02T16:54:43+0700",
+    date = "2026-03-04T19:38:51+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import taskManager.database.entities.UserEntity;
+import taskManager.database.entity.UserEntity;
 
 public record CustomUsersDetails(UserEntity user) implements UserDetails {
     

@@ -2,7 +2,7 @@ package taskManager.mapper;
 
 import org.mapstruct.Mapper;
 
-import taskManager.database.entities.UserEntity;
+import taskManager.database.entity.UserEntity;
 import taskManager.web.dto.User;
 import taskManager.web.dto.UserResponse;
 

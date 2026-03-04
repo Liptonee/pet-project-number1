@@ -3,7 +3,7 @@ package taskManager.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import taskManager.database.entities.CommentEntity;
+import taskManager.database.entity.CommentEntity;
 import taskManager.web.dto.Comment;
 import taskManager.web.dto.CommentResponse;
 

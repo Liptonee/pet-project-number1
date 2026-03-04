@@ -3,7 +3,7 @@ package taskManager.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import taskManager.database.entities.ProjectEntity;
+import taskManager.database.entity.ProjectEntity;
 import taskManager.web.dto.Project;
 import taskManager.web.dto.ProjectResponse;
 

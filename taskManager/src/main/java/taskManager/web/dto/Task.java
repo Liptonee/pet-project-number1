@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import taskManager.database.entities.TaskPriority;
+import taskManager.database.entity.TaskPriority;
 
 
 public record Task(
