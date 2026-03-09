@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import taskManager.web.dto.JwtAuthenticationDto;
 import taskManager.web.dto.RefreshTokenDto;
 import taskManager.web.dto.UserCredentialDto;
@@ -19,6 +20,7 @@ import taskManager.web.security.jwt.JwtService;
 @Controller
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
 
@@ -27,8 +29,9 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthenticationDto> login(@RequestBody UserCredentialDto userCredential){
-
+    public ResponseEntity<JwtAuthenticationDto> login(@RequestBody UserCredentialDto userCredential
+    ){
+        log.info("From CONTROLLER called login");
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                                                                 userCredential.getEmail(), userCredential.getPassword());
         Authentication authentication = authenticationManager.authenticate(authToken);
@@ -40,7 +43,10 @@ public class AuthController {
 
 
     @PostMapping("/refresh")
-    public ResponseEntity<JwtAuthenticationDto> refresh(@RequestBody RefreshTokenDto refreshTokenDto){
+    public ResponseEntity<JwtAuthenticationDto> refresh(@RequestBody RefreshTokenDto refreshTokenDto
+    ){
+        log.info("From CONTROLLER called refresh");
+
         String refreshToken = refreshTokenDto.getRefreshToken();
 
         if (!jwtService.validateJwtToken(refreshToken)) {

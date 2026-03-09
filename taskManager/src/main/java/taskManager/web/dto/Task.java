@@ -1,6 +1,7 @@
 package taskManager.web.dto;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +19,7 @@ public record Task(
     String description,
 
     @FutureOrPresent
-    LocalDate deadline,
+    LocalDateTime deadline,
     
     TaskPriority priority
 ) {

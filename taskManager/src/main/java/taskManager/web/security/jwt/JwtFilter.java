@@ -47,7 +47,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
         try {
-
             userEmail = jwtService.getEmailFromToken(jwt);
         } catch (Exception e) {
             log.error("Ошибка при обработке JWT: {}", e.getMessage());

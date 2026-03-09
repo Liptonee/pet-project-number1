@@ -1,46 +1,83 @@
 package taskManager.web.exception;
 
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(exception = { Exception.class })
-    public ResponseEntity<ErrorResponseDto> handleGenericException(Exception e) {
-        var errorDto = new ErrorResponseDto(
-                "Internal server error",
-                e.getMessage(),
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
+    //500
+    @ExceptionHandler(exception = Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception e,
+                                                                HttpServletRequest request) {
+        log.error("Internal server error",e);
+        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request);
     }
 
-    @ExceptionHandler(exception = { IllegalArgumentException.class,
-            MethodArgumentNotValidException.class })
-    public ResponseEntity<ErrorResponseDto> handleValidException(Exception e) {
-        var errorDto = new ErrorResponseDto(
-                "Bad request",
-                e.getMessage(),
-                LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    //403
+    @ExceptionHandler(exception = AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleForbiddenException(AccessDeniedException e,
+                                                                HttpServletRequest request){
+        log.error("Access denied {}", e.getMessage());
+        return buildErrorResponse(HttpStatus.FORBIDDEN, e.getMessage(), request);
     }
 
+    //404
+    @ExceptionHandler(exception = ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(ResourceNotFoundException e,
+                                                                HttpServletRequest request){
+        log.error("Resource not found {}", e.getMessage());
+        return buildErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request);
+    }
+
+    //400
+    @ExceptionHandler(exception = {IllegalArgumentException.class,MethodArgumentNotValidException.class})
+    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException e,
+                                                                HttpServletRequest request){
+        log.error("Bad request {}", e.getMessage());
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request);
+    }
+
+    //409
+    @ExceptionHandler(exception = DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse> handleConflictException(DuplicateResourceException e,
+                                                                HttpServletRequest request){
+
+        log.error("Duplicate resource: {}", e.getMessage());
+        return buildErrorResponse(HttpStatus.CONFLICT, e.getMessage(), request);
+    }
+
+    //401
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponseDto> handleAuthenticationException(AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponseDto("Unauthorized", e.getMessage(), LocalDateTime.now()));
+    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException e,
+                                                              HttpServletRequest request) {
+        log.error("Authentication error: {}", e.getMessage());
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), request);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new ErrorResponseDto("Forbidden", e.getMessage(), LocalDateTime.now()));
+
+    private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status,
+                                                             String message,
+                                                             HttpServletRequest request) {
+        ErrorResponse response = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .error(status.getReasonPhrase())
+                .message(message)
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(status).body(response);
     }
+
 }

@@ -2,12 +2,13 @@ package taskManager.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 import taskManager.database.entity.ProjectEntity;
 import taskManager.web.dto.Project;
 import taskManager.web.dto.ProjectResponse;
 
-@Mapper(componentModel = "spring",uses = {UserMapper.class})
+@Mapper(componentModel = "spring",uses = {UserMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ProjectMapper {
     
     @Mapping(source="owner.id",target="owner_id")
