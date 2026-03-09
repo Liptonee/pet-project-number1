@@ -28,13 +28,13 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath isPrivateProfile = createBoolean("isPrivateProfile");
-
     public final ListPath<ProjectEntity, QProjectEntity> ownProjectsList = this.<ProjectEntity, QProjectEntity>createList("ownProjectsList", ProjectEntity.class, QProjectEntity.class, PathInits.DIRECT2);
 
     public final ListPath<ProjectEntity, QProjectEntity> participatedProjectsList = this.<ProjectEntity, QProjectEntity>createList("participatedProjectsList", ProjectEntity.class, QProjectEntity.class, PathInits.DIRECT2);
 
     public final StringPath password = createString("password");
+
+    public final BooleanPath privateProfile = createBoolean("privateProfile");
 
     public final ListPath<TaskEntity, QTaskEntity> tasksList = this.<TaskEntity, QTaskEntity>createList("tasksList", TaskEntity.class, QTaskEntity.class, PathInits.DIRECT2);
 

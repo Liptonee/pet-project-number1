@@ -13,9 +13,9 @@ import taskManager.database.entity.ProjectEntity;
 @Repository
 public interface  ProjectRepository extends JpaRepository<ProjectEntity, Long>,
                                             QuerydslPredicateExecutor<ProjectEntity>{
-    boolean existsByOwnerIdAndName(Long ownerId, String name);
+    boolean existsByNameAndOwnerId(String name, Long ownerId);
 
-    boolean existsByOwnerIdAndId(Long ownerId, Long id);
+    boolean existsByIdAndOwnerId(Long id, Long ownerId);
 
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END " +

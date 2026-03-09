@@ -41,7 +41,7 @@ public class UserService {
         }
 
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userEntity.setIsPrivateProfile(userRequest.isPrivateProfile() == null ? false : userRequest.isPrivateProfile());
+        userEntity.setPrivateProfile(userRequest.privateProfile() == null ? false : userRequest.privateProfile());
         
         UserEntity saved = userRepository.save(userEntity);
 
@@ -64,7 +64,7 @@ public class UserService {
         log.info("From SERVICE called getUser");
         UserEntity user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User doesn't exist with id = " + userId));
-        if (!currentUserId.equals(userId) && user.getIsPrivateProfile()){
+        if (!currentUserId.equals(userId) && user.getPrivateProfile()){
             throw new AccessDeniedException("Profile is private");
         }
 

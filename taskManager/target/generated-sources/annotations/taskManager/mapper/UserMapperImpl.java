@@ -8,7 +8,7 @@ import taskManager.web.dto.UserResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-06T14:26:41+0700",
+    date = "2026-03-09T19:28:32+0700",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -23,8 +23,8 @@ public class UserMapperImpl implements UserMapper {
         UserEntity userEntity = new UserEntity();
 
         userEntity.setEmail( dto.email() );
-        userEntity.setIsPrivateProfile( dto.isPrivateProfile() );
         userEntity.setPassword( dto.password() );
+        userEntity.setPrivateProfile( dto.privateProfile() );
         userEntity.setUsername( dto.username() );
 
         return userEntity;
@@ -39,14 +39,14 @@ public class UserMapperImpl implements UserMapper {
         Long id = null;
         String email = null;
         String username = null;
-        Boolean isPrivateProfile = null;
+        Boolean privateProfile = null;
 
         id = entity.getId();
         email = entity.getEmail();
         username = entity.getUsername();
-        isPrivateProfile = entity.getIsPrivateProfile();
+        privateProfile = entity.getPrivateProfile();
 
-        UserResponse userResponse = new UserResponse( id, email, username, isPrivateProfile );
+        UserResponse userResponse = new UserResponse( id, email, username, privateProfile );
 
         return userResponse;
     }

@@ -19,7 +19,7 @@ public record User(
     )
     String password,
 
-    Boolean isPrivateProfile,
+    Boolean privateProfile,
 
     @NotBlank(message="name cant be empty")
     @Size(max = 15, min = 2)

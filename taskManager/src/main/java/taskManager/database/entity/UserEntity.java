@@ -47,7 +47,7 @@ public class UserEntity {
     private String username;
     
     @Column(name="private_profile",nullable=false)
-    private Boolean isPrivateProfile;
+    private Boolean privateProfile;
 
     @ManyToMany(mappedBy="executorsList")
     private List<TaskEntity> tasksList = new ArrayList<>();

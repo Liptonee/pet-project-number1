@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import taskManager.mapper.TaskMapper;
 import taskManager.web.dto.PageResponse;
 import taskManager.web.dto.Task;
 import taskManager.web.dto.TaskResponse;
+import taskManager.web.exception.ResourceNotFoundException;
 
 @RequiredArgsConstructor
 @Service
@@ -42,15 +44,16 @@ public class TaskService {
     ){
         log.info("From SERVICE called createTask");
 
-        if (!projectRepository.existsByOwnerIdAndId(currentUserId, projectId)){
-            throw new IllegalArgumentException("User doesn't owner of this project with id = " + projectId);
+        //owner
+        if (!projectRepository.existsByIdAndOwnerId(projectId, currentUserId)){
+            throw new AccessDeniedException("You doesn't owner of this project with id = " + projectId);
         }   
         ProjectEntity project = projectRepository.findById(projectId).orElseThrow(
-            () -> new IllegalArgumentException("Project doesn't exist with id = " + projectId)
+            () -> new ResourceNotFoundException("Project doesn't exist with id = " + projectId)
         );
 
         if(request.deadline() != null){
-            if (request.deadline().isAfter(LocalDateTime.now())) 
+            if (!request.deadline().isAfter(LocalDateTime.now())) 
                 throw new IllegalArgumentException("Deadline must be in future");
         }
 
@@ -74,12 +77,15 @@ public class TaskService {
         
         //exist
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(
-            () -> new IllegalArgumentException("Task doesn't exist with id = " + taskId)
+            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId)
         );
         
         //member
-        if(!projectRepository.existsByIdAndMemberId(task.getProject().getId(), currentUserId)){
-            throw new IllegalArgumentException("You are not member of this project or project doesn't exist");
+        if (!projectRepository.existsById(task.getProject().getId())){
+            throw new ResourceNotFoundException("Project doesn't exist with id = " + task.getProject().getId());  
+        }
+        if (!projectRepository.existsByIdAndMemberId(task.getProject().getId(), currentUserId)){
+            throw new AccessDeniedException("You are not member of this project with id = " + task.getProject().getId());  
         }
 
         return taskMapper.toResponse(task);
@@ -93,15 +99,15 @@ public class TaskService {
 
         //member
         if (!projectRepository.existsById(projectId)){
-            throw new IllegalArgumentException("Project doesn't exist with id = " + projectId);  
+            throw new ResourceNotFoundException("Project doesn't exist with id = " + projectId);  
         }
         if (!projectRepository.existsByIdAndMemberId(projectId, currentUserId)){
-            throw new IllegalArgumentException("You are not member of this project with id = " + projectId);  
+            throw new AccessDeniedException("You are not member of this project with id = " + projectId);  
         }
 
 
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(
-            () -> new IllegalArgumentException("Task doesn't exist with id = " + taskId)
+            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId)
         );
 
         //task in this project
@@ -147,10 +153,10 @@ public class TaskService {
 
         //member
         if (!projectRepository.existsById(projectId)){
-            throw new IllegalArgumentException("Project doesn't exist with id = " + projectId);  
+            throw new ResourceNotFoundException("Project doesn't exist with id = " + projectId);  
         }
         if (!projectRepository.existsByIdAndMemberId(projectId, currentUserId)){
-            throw new IllegalArgumentException("You are not member of this project with id = " + projectId);  
+            throw new AccessDeniedException("You are not member of this project with id = " + projectId);  
         }
 
         QTaskEntity task = QTaskEntity.taskEntity;

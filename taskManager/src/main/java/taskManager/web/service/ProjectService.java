@@ -44,7 +44,7 @@ public class ProjectService {
         );
 
 
-        if (projectRepository.existsByOwnerIdAndName(currentUserId,projectRequest.name())){
+        if (projectRepository.existsByNameAndOwnerId(projectRequest.name(), currentUserId)){
             throw new DuplicateResourceException("Project with this name already exist");
         }
         
