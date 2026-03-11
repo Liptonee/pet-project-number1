@@ -3,13 +3,13 @@ package taskManager.mapper;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import taskManager.database.entity.UserEntity;
-import taskManager.web.dto.User;
-import taskManager.web.dto.UserResponse;
+import taskManager.web.dto.request.User;
+import taskManager.web.dto.response.UserResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-09T19:28:32+0700",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-11T20:06:41+0700",
+    comments = "version: 1.7.0.Beta1, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {

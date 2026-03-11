@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 import taskManager.database.entity.UserEntity;
-import taskManager.web.dto.User;
-import taskManager.web.dto.UserResponse;
+import taskManager.web.dto.request.User;
+import taskManager.web.dto.response.UserResponse;
 
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE) 

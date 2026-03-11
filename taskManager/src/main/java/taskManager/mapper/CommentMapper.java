@@ -5,8 +5,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import taskManager.database.entity.CommentEntity;
-import taskManager.web.dto.Comment;
-import taskManager.web.dto.CommentResponse;
+import taskManager.web.dto.request.Comment;
+import taskManager.web.dto.response.CommentResponse;
 
 
 @Mapper(componentModel = "spring",uses = {UserMapper.class,TaskMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)

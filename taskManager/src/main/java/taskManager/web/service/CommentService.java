@@ -20,9 +20,9 @@ import taskManager.database.repository.TaskRepository;
 import taskManager.database.repository.UserRepository;
 import taskManager.mapper.CommentMapper;
 import taskManager.mapper.PageMapper;
-import taskManager.web.dto.Comment;
-import taskManager.web.dto.CommentResponse;
-import taskManager.web.dto.PageResponse;
+import taskManager.web.dto.request.Comment;
+import taskManager.web.dto.response.CommentResponse;
+import taskManager.web.dto.response.PageResponse;
 import taskManager.web.exception.ResourceNotFoundException;
 
 @Service
@@ -61,9 +61,6 @@ public class CommentService {
         commentEntity.setUser(user);
 
         CommentEntity saved = commentRepository.save(commentEntity);
-
-        user.getComments().add(saved);
-        task.getCommentsList().add(saved);
 
         return commentMapper.toResponse(saved);
     }

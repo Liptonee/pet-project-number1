@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import taskManager.web.dto.JwtAuthenticationDto;
-import taskManager.web.dto.RefreshTokenDto;
-import taskManager.web.dto.UserCredentialDto;
+import taskManager.web.dto.request.RefreshTokenDto;
+import taskManager.web.dto.request.UserCredentialDto;
+import taskManager.web.dto.response.JwtAuthenticationDto;
 import taskManager.web.security.jwt.JwtService;
 
 @Controller

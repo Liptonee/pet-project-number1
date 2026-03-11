@@ -17,9 +17,10 @@ import taskManager.database.repository.ProjectRepository;
 import taskManager.database.repository.UserRepository;
 import taskManager.mapper.PageMapper;
 import taskManager.mapper.ProjectMapper;
-import taskManager.web.dto.PageResponse;
-import taskManager.web.dto.Project;
-import taskManager.web.dto.ProjectResponse;
+import taskManager.web.dto.request.Project;
+import taskManager.web.dto.request.ProjectPatch;
+import taskManager.web.dto.response.PageResponse;
+import taskManager.web.dto.response.ProjectResponse;
 import taskManager.web.exception.DuplicateResourceException;
 import taskManager.web.exception.ResourceNotFoundException;
 
@@ -53,13 +54,11 @@ public class ProjectService {
         projectEntity.setOwner(user);
         projectEntity.getMembersList().add(user);
 
-
         ProjectEntity saved = projectRepository.save(projectEntity);
-        user.getOwnProjectsList().add(saved);
-        user.getParticipatedProjectsList().add(saved);
 
         return projectMapper.toResponse(saved);
     }
+
 
     @Transactional(readOnly = true)
     public ProjectResponse getProject(Long currentUserId, Long projectId
@@ -80,6 +79,7 @@ public class ProjectService {
 
         return projectMapper.toResponse(project);
     } 
+
 
     @Transactional(readOnly = true)
     public PageResponse<ProjectResponse> getAllProjects(Long currentUserId,
@@ -102,5 +102,115 @@ public class ProjectService {
         return pageMapper.toPageResponse(page, projectMapper::toResponse);
 
     }
+
+
+    @Transactional
+    public ProjectResponse putProject(Long currentUserId, Long projectId, Project request
+    ){
+        log.info("From SERVICE called updateProject");
+
+
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id = " + projectId));
+
+        //owner
+        if (!project.getOwner().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("You are not the owner of this project");
+        }
+
+        project.setName(request.name());
+        project.setDescription(request.description());
+
+        return projectMapper.toResponse(project);
+    }
+
+
+    @Transactional
+    public void addMemberToProject(Long currentUserId, Long projectId, Long userId
+    ){
+        log.info("From SERVICE called addMemberToProject");
+        //exist
+        if(!projectRepository.existsById(projectId)){
+            throw new ResourceNotFoundException("Project not found with id = " + projectId);
+        }
+        //owner
+        if(!projectRepository.existsByIdAndOwnerId(projectId, currentUserId)){
+            throw new AccessDeniedException("You are not the owner of this project");
+        }
+        //exist
+        if(!userRepository.existsById(userId)){
+            throw new ResourceNotFoundException("User not found with id = " + userId);
+        }
+        //duplicate
+        if(projectRepository.existsByIdAndMemberId(projectId, userId)){
+            throw new DuplicateResourceException("User is already member");
+        }
+
+        projectRepository.addMember(projectId, userId);
+    }
+
+    @Transactional
+    public ProjectResponse updateProject(Long currentUserId, Long projectId, ProjectPatch request
+    ){
+        log.info("From SERVICE called updateProject");
+
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id = " + projectId));
+
+        if(!project.getOwner().getId().equals(currentUserId)){
+            throw new AccessDeniedException("You are not the owner of this project");
+        }
+
+        if(request.name() != null){
+            if(request.name().isBlank()){
+                throw new IllegalArgumentException("Name cant be blank");
+            }
+            if(projectRepository.existsByNameAndOwnerId(project.getName(), currentUserId)){
+                throw new DuplicateResourceException("This name already in use");
+            }
+            project.setName(request.name());
+        }
+
+        if (request.description() != null) {
+            project.setDescription(request.description().isEmpty() ? null : request.description());
+        }
+
+        return projectMapper.toResponse(project);
+    }
+
+
+    @Transactional
+    public void deleteProject(Long currentUserId, Long projectId
+    ){
+        log.info("From SERVICE called updateProject");
+
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found"));
+
+        if (!project.getOwner().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("You are not the owner of this project");
+        }
+
+        projectRepository.delete(project);
+    }
+
+    @Transactional
+    public void deleteMember(Long currentUserId, Long projectId, Long userId
+    ){
+        log.info("From SERVICE called deleteMember");
+
+        if(!projectRepository.existsById(projectId)){
+            throw new ResourceNotFoundException("Project not found");
+        }
+        if (!projectRepository.existsByIdAndOwnerId(projectId, currentUserId)) {
+            throw new AccessDeniedException("You are not the owner of this project");
+        }
+        if(!projectRepository.existsByIdAndMemberId(projectId, userId)){
+            throw new IllegalArgumentException("User is not member of this project");
+        }
+        
+        projectRepository.deleteMember(projectId,userId);
+    }
+
 
 }

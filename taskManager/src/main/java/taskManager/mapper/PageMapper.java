@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import taskManager.web.dto.PageResponse;
+import taskManager.web.dto.response.PageResponse;
 
 @Component
 public class PageMapper {

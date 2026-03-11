@@ -1,8 +1,6 @@
 package taskManager.web.service;
 
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,11 +18,15 @@ import taskManager.database.entity.TaskPriority;
 import taskManager.database.entity.TaskStatus;
 import taskManager.database.repository.ProjectRepository;
 import taskManager.database.repository.TaskRepository;
+import taskManager.database.repository.UserRepository;
 import taskManager.mapper.PageMapper;
 import taskManager.mapper.TaskMapper;
-import taskManager.web.dto.PageResponse;
-import taskManager.web.dto.Task;
-import taskManager.web.dto.TaskResponse;
+import taskManager.web.dto.request.Task;
+import taskManager.web.dto.request.TaskPatch;
+import taskManager.web.dto.request.TaskStatusPatch;
+import taskManager.web.dto.response.PageResponse;
+import taskManager.web.dto.response.TaskResponse;
+import taskManager.web.exception.DuplicateResourceException;
 import taskManager.web.exception.ResourceNotFoundException;
 
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class TaskService {
     private final TaskMapper taskMapper;
     private final ProjectRepository projectRepository;
     private final PageMapper pageMapper;
+    private final UserRepository userRepository;
 
     @Transactional
     public TaskResponse createTask(Long currentUserId, Long projectId, Task request
@@ -52,11 +55,6 @@ public class TaskService {
             () -> new ResourceNotFoundException("Project doesn't exist with id = " + projectId)
         );
 
-        if(request.deadline() != null){
-            if (!request.deadline().isAfter(LocalDateTime.now())) 
-                throw new IllegalArgumentException("Deadline must be in future");
-        }
-
         TaskEntity taskEntity = taskMapper.toEntity(request);
         taskEntity.setPriority(request.priority() == null ? TaskPriority.NOT_SELECTED : request.priority());
         taskEntity.setDescription(request.description() == null ? "No description" : request.description());
@@ -64,8 +62,6 @@ public class TaskService {
         taskEntity.setProject(project);
 
         TaskEntity saved = taskRepository.save(taskEntity);
-        project.getTasksList().add(saved);
-
         return taskMapper.toResponse(saved);
     }
 
@@ -77,13 +73,9 @@ public class TaskService {
         
         //exist
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(
-            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId)
-        );
+            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId));
         
         //member
-        if (!projectRepository.existsById(task.getProject().getId())){
-            throw new ResourceNotFoundException("Project doesn't exist with id = " + task.getProject().getId());  
-        }
         if (!projectRepository.existsByIdAndMemberId(task.getProject().getId(), currentUserId)){
             throw new AccessDeniedException("You are not member of this project with id = " + task.getProject().getId());  
         }
@@ -170,5 +162,124 @@ public class TaskService {
 
         Page<TaskEntity> page = taskRepository.findAll(builder, pageable);
         return pageMapper.toPageResponse(page, taskMapper::toResponse);
+    }
+
+    @Transactional
+    public void addExecutorToTask(Long currentUserId, Long taskId, Long userId
+    ){
+        log.info("From SERVICE called addExecutorToTask");
+
+        //exist
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(
+            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId));
+        //owner
+        if(!task.getProject().getOwner().getId().equals(currentUserId)){
+            throw new AccessDeniedException("You are not owner of this project");
+        }
+        //exist
+        if(!userRepository.existsById(userId)){
+            throw new ResourceNotFoundException("User doesn't exist with id = " + userId);
+        }
+        //member
+        if(!projectRepository.existsByIdAndMemberId(task.getProject().getId(), userId)){
+            throw new IllegalArgumentException("User is not member of this project");
+        }
+        //duplicate
+        if (taskRepository.existsByIdAndExecutorId(taskId, userId)){
+            throw new DuplicateResourceException("User is already executor");
+        }
+
+        taskRepository.addExecutor(taskId, userId);
+    }
+
+    @Transactional
+    public void addStatus(Long currentUserId, Long taskId, TaskStatusPatch request
+    ){
+        log.info("From SERVICE called addStatus");
+
+        //exist
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(
+            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId));
+        //member
+        if(!projectRepository.existsByIdAndMemberId(task.getProject().getId(), currentUserId)){
+            throw new IllegalArgumentException("User is not member of this project");
+        }
+
+        if(projectRepository.existsByIdAndOwnerId(task.getProject().getId(), currentUserId)){
+            task.setStatus(request.status());
+        }else if(request.status().equals(TaskStatus.ON_REVIEW)){
+            task.setStatus(request.status());
+        }else{
+            throw new AccessDeniedException("You can only change to ON_REVIEW");
+        }
+        
+    }
+
+    @Transactional
+    public TaskResponse updateTask(Long currentUserId, Long taskId, TaskPatch request
+    ){
+        log.info("From SERVICE called updateTask");
+
+        TaskEntity task = taskRepository.findById(taskId).orElseThrow(
+            () -> new ResourceNotFoundException("Task doesn't exist with id = " + taskId));
+
+        if(!task.getProject().getOwner().getId().equals(currentUserId)){
+            throw new AccessDeniedException("You are not owner of this project");
+        }
+
+        if(request.name() != null){
+            if(request.name().isBlank()){
+                throw new IllegalArgumentException("Name cant be blank");
+            }
+            task.setName(request.name());
+        }
+        if(request.description() != null){
+            task.setDescription(request.description().isEmpty() ? null : request.description());
+        }
+        if(request.deadline() != null){
+            task.setDeadline(request.deadline());
+        }
+        if(request.priority() != null){
+            task.setPriority(request.priority());
+        }
+
+        
+        return taskMapper.toResponse(task); 
+
+    }
+
+
+    @Transactional
+    public void deleteTask(Long currentUserId, Long taskId
+    ){
+        log.info("From SERVICE called deleteTask");
+
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id = " + taskId));
+
+        if (!task.getProject().getOwner().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("Only the project owner can delete tasks");
+        }
+
+        taskRepository.delete(task);
+    }
+
+    @Transactional
+    public void deleteExecutor(Long currentUserId, Long taskId, Long userId
+    ){
+        log.info("From SERVICE called deleteExecutor");
+
+        TaskEntity task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id = " + taskId));
+
+        if (!task.getProject().getOwner().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("Only the project owner can remove executors");
+        }
+
+        if (!taskRepository.existsByIdAndExecutorId(taskId, userId)) {
+            throw new ResourceNotFoundException("User is not an executor of this task");
+        }
+
+        taskRepository.deleteExecutor(taskId, userId);
     }
 }   

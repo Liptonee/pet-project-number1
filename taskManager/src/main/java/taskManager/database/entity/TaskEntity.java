@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -62,7 +63,7 @@ public class TaskEntity {
     //      евреенко писилий засранович
 
 
-    @OneToMany(mappedBy="task")
+    @OneToMany(mappedBy="task", cascade = CascadeType.REMOVE)
     private List<CommentEntity> commentsList = new ArrayList<>();
 
     @ManyToMany
