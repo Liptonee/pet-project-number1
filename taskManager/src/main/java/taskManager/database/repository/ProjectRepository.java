@@ -31,4 +31,8 @@ public interface  ProjectRepository extends JpaRepository<ProjectEntity, Long>,
     @Modifying
     @Query(value = "DELETE FROM user_projects WHERE project_id = :projectId AND user_id = :userId", nativeQuery=true)
     void deleteMember(@Param("projectId") Long projectId, @Param("userId") Long userId);
+
+    @Modifying
+    @Query(value = "DELETE FROM user_projects WHERE project_id = :projectId", nativeQuery = true)
+    void deleteAllMembers(@Param("projectId") Long projectId);
 }

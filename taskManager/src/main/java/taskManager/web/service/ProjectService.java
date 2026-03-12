@@ -52,9 +52,9 @@ public class ProjectService {
 
         ProjectEntity projectEntity = projectMapper.toEntity(projectRequest);
         projectEntity.setOwner(user);
-        projectEntity.getMembersList().add(user);
 
         ProjectEntity saved = projectRepository.save(projectEntity);
+        projectRepository.addMember(saved.getId(), currentUserId);
 
         return projectMapper.toResponse(saved);
     }
@@ -165,7 +165,7 @@ public class ProjectService {
             if(request.name().isBlank()){
                 throw new IllegalArgumentException("Name cant be blank");
             }
-            if(projectRepository.existsByNameAndOwnerId(project.getName(), currentUserId)){
+            if(projectRepository.existsByNameAndOwnerId(request.name(), currentUserId)){
                 throw new DuplicateResourceException("This name already in use");
             }
             project.setName(request.name());
@@ -190,7 +190,7 @@ public class ProjectService {
         if (!project.getOwner().getId().equals(currentUserId)) {
             throw new AccessDeniedException("You are not the owner of this project");
         }
-
+        projectRepository.deleteAllMembers(projectId);
         projectRepository.delete(project);
     }
 

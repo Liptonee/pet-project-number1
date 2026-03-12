@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
 
     //400
     @ExceptionHandler(exception = {IllegalArgumentException.class,MethodArgumentNotValidException.class})
-    public ResponseEntity<ErrorResponse> handleBadRequestException(RuntimeException e,
+    public ResponseEntity<ErrorResponse> handleBadRequestException(Exception e,
                                                                 HttpServletRequest request){
         log.error("Bad request {}", e.getMessage());
         return buildErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage(), request);
