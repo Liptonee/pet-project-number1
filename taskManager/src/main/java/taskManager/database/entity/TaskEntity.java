@@ -58,9 +58,9 @@ public class TaskEntity {
     private TaskPriority priority;
 
     @ManyToOne
-    @JoinColumn(name="project_id", referencedColumnName="id", nullable=false)//педираст.абсермссретвике в рот 
-    private ProjectEntity project;//в огромных колвах и не вытирает жопу
-    //      евреенко писилий засранович
+    @JoinColumn(name="project_id", referencedColumnName="id", nullable=false) 
+    private ProjectEntity project;
+
 
 
     @OneToMany(mappedBy="task", cascade = CascadeType.REMOVE)
