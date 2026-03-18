@@ -23,5 +23,4 @@ public record Task(
     
     TaskPriority priority
 ) {
-    
 }

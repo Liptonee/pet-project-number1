@@ -44,10 +44,7 @@ public class CommentEntity {
     private TaskEntity task;
     
     
-    @Column(name = "send_time",nullable=false,updatable=false)
-    private LocalDateTime sendTime = LocalDateTime.now();
+    @Column(name = "created_at",nullable=false,updatable=false)
+    private LocalDateTime createdAt = LocalDateTime.now();
     
-
-
-
 }

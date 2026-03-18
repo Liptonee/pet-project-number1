@@ -41,6 +41,7 @@ C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\exc
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\exception\ErrorResponse.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\exception\GlobalExceptionHandler.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\exception\ResourceNotFoundException.java
+C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\OpenAPIConfig.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\security\AuthController.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\security\CustomUserDetailsService.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\security\CustomUsersDetails.java
