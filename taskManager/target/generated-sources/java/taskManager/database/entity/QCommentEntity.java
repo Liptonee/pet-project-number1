@@ -22,11 +22,11 @@ public class QCommentEntity extends EntityPathBase<CommentEntity> {
 
     public static final QCommentEntity commentEntity = new QCommentEntity("commentEntity");
 
+    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath message = createString("message");
-
-    public final DateTimePath<java.time.LocalDateTime> sendTime = createDateTime("sendTime", java.time.LocalDateTime.class);
 
     public final QTaskEntity task;
 

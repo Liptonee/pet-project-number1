@@ -13,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -69,7 +70,8 @@ public class TaskEntity {
     @ManyToMany
     @JoinTable(name="user_tasks",
                 joinColumns=@JoinColumn(name="task_id",referencedColumnName="id"),
-                inverseJoinColumns=@JoinColumn(name="user_id",referencedColumnName="id"))
+                inverseJoinColumns=@JoinColumn(name="user_id",referencedColumnName="id"),
+                indexes = @Index(name = "idx_user_tasks_user_id", columnList = "user_id"))
     private List<UserEntity> executorsList = new ArrayList<>();
 
 

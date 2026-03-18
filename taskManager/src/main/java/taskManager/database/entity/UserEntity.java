@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -60,7 +61,8 @@ public class UserEntity {
     @ManyToMany
     @JoinTable(name="user_projects",
                 joinColumns = @JoinColumn(name="user_id",referencedColumnName="id"),
-                inverseJoinColumns= @JoinColumn(name="project_id",referencedColumnName="id")
+                inverseJoinColumns= @JoinColumn(name="project_id",referencedColumnName="id"),
+                indexes = @Index(name = "idx_user_projects_project_user", columnList = "project_id, user_id")
     )
     private List<ProjectEntity> participatedProjectsList = new ArrayList<>();
 

@@ -10,7 +10,7 @@ import taskManager.web.dto.response.ProjectResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-18T13:46:41+0700",
+    date = "2026-03-18T20:05:13+0700",
     comments = "version: 1.7.0.Beta1, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
@@ -47,8 +47,8 @@ public class ProjectMapperImpl implements ProjectMapper {
 
         ProjectEntity projectEntity = new ProjectEntity();
 
-        projectEntity.setDescription( dto.description() );
         projectEntity.setName( dto.name() );
+        projectEntity.setDescription( dto.description() );
 
         return projectEntity;
     }
