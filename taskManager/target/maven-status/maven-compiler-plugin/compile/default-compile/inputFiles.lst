@@ -4,6 +4,7 @@ C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\databas
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\entity\TaskPriority.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\entity\TaskStatus.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\entity\UserEntity.java
+C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\RedisConfig.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\repository\CommentRepository.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\repository\ProjectRepository.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\repository\TaskRepository.java

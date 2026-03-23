@@ -10,7 +10,7 @@ import taskManager.web.dto.response.CommentResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-18T20:14:49+0700",
+    date = "2026-03-23T18:46:59+0700",
     comments = "version: 1.7.0.Beta1, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component

@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import taskManager.database.entity.UserEntity;
 import taskManager.web.dto.request.User;
 import taskManager.web.dto.response.UserResponse;
+import taskManager.web.dto.response.UsernameResponse;
 
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE) 
@@ -15,4 +16,6 @@ public interface UserMapper{
 
     
     UserResponse toResponse(UserEntity entity);
+
+    UsernameResponse toUsernameResponse (UserEntity entity);
 }

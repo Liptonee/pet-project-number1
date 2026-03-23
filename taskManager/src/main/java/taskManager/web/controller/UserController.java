@@ -24,6 +24,7 @@ import taskManager.web.dto.request.User;
 import taskManager.web.dto.request.UserPatch;
 import taskManager.web.dto.response.PageResponse;
 import taskManager.web.dto.response.UserResponse;
+import taskManager.web.dto.response.UsernameResponse;
 import taskManager.web.security.CustomUsersDetails;
 import taskManager.web.service.UserService;
 
@@ -82,14 +83,14 @@ public class UserController {
     @Operation(summary = "Получить участников проекта",
     description = "Возвращает список пользователей, участвующих в проекте. Можно отфильтровать по исполнителям конкретной задачи (taskId). Доступно участникам проекта.")
     @GetMapping("/projects/{projectId}/members")
-    public ResponseEntity<PageResponse<UserResponse>> getAllUsersFromProject(
+    public ResponseEntity<PageResponse<UsernameResponse>> getAllUsersFromProject(
             @AuthenticationPrincipal CustomUsersDetails currentUser,
             @PathVariable("projectId") Long projectId,
             @RequestParam(required=false) Long taskId,
             @PageableDefault(size = 20, sort = "username", direction = Sort.Direction.DESC) Pageable pageable
     ){
         log.info("From CONTROLLER called getAllUsersFromProject");
-        PageResponse<UserResponse> response = userService.getAllUsersFromProject(currentUser.user().getId(), projectId, taskId, pageable);
+        PageResponse<UsernameResponse> response = userService.getAllUsersFromProject(currentUser.user().getId(), projectId, taskId, pageable);
         return ResponseEntity.ok(response);
     }
     

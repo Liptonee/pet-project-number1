@@ -1,7 +1,14 @@
 package taskManager.web.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +41,7 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
     private final UserRepository userRepository;
     private final PageMapper pageMapper;
+    private final RedisTemplate<String,Object> redisTemplate;
 
     @Transactional
     public ProjectResponse createProject(Long currentUserId, Project projectRequest
@@ -56,6 +64,12 @@ public class ProjectService {
         ProjectEntity saved = projectRepository.save(projectEntity);
         projectRepository.addMember(saved.getId(), currentUserId);
 
+
+        Set<String> cacheKeySet = redisTemplate.keys("projects::" + currentUserId + "*");
+        if (cacheKeySet != null && !cacheKeySet.isEmpty()){
+            redisTemplate.delete(cacheKeySet);
+        }
+
         return projectMapper.toResponse(saved);
     }
 
@@ -73,23 +87,34 @@ public class ProjectService {
             throw new AccessDeniedException("You are not member of this project with id = " + projectId);  
         }
 
+
+        String cacheKey = "project::" + projectId + "_" + currentUserId;                           
+        ProjectResponse responseFromCache = (ProjectResponse) redisTemplate.opsForValue().get(cacheKey);
+        if(responseFromCache != null) return responseFromCache;
+
+
         ProjectEntity project = projectRepository.findById(projectId).orElseThrow(
             () -> new ResourceNotFoundException("Project doesn't exist with id = " + projectId)
         );
+        ProjectResponse response = projectMapper.toResponse(project);
+        redisTemplate.opsForValue().set(cacheKey, response, 10, TimeUnit.MINUTES);
 
-        return projectMapper.toResponse(project);
+        return response;
     } 
 
-
+      
     @Transactional(readOnly = true)
     public PageResponse<ProjectResponse> getAllProjects(Long currentUserId,
             Boolean isOwner,
             Pageable pageable
     ){
         log.info("From SERVICE called getAllProjects");
-        
         QProjectEntity project = QProjectEntity.projectEntity;
         BooleanBuilder builder = new BooleanBuilder();
+
+        String cacheKey = "projects::" + currentUserId + "_" + isOwner + "_" + pageable.getPageNumber() + "_" + pageable.getPageSize();
+        PageResponse<ProjectResponse> responseFromCache = (PageResponse<ProjectResponse>) redisTemplate.opsForValue().get(cacheKey);
+        if(responseFromCache != null) return responseFromCache;
 
         builder.and(project.membersList.any().id.eq(currentUserId));
         if(isOwner != null){
@@ -99,8 +124,11 @@ public class ProjectService {
         }
 
         Page<ProjectEntity> page = projectRepository.findAll(builder, pageable);
-        return pageMapper.toPageResponse(page, projectMapper::toResponse);
+        PageResponse<ProjectResponse> response = pageMapper.toPageResponse(page, projectMapper::toResponse);
 
+        redisTemplate.opsForValue().set(cacheKey, response, 10, TimeUnit.MINUTES);
+
+        return response;
     }
 
 
@@ -121,6 +149,17 @@ public class ProjectService {
         project.setName(request.name());
         project.setDescription(request.description());
 
+
+        Set<String> cacheKeySet = new HashSet<>();
+        cacheKeySet.addAll(redisTemplate.keys("project::"+projectId+"*"));
+        List<Long> memberIds = project.getMembersList().stream().map(x -> x.getId()).collect(Collectors.toList());
+        for (Long id : memberIds){
+            cacheKeySet.addAll(redisTemplate.keys("projects::"+id+"*"));
+        }
+        if (!cacheKeySet.isEmpty()){
+            redisTemplate.delete(cacheKeySet);
+        }
+        
         return projectMapper.toResponse(project);
     }
 
@@ -175,6 +214,16 @@ public class ProjectService {
             project.setDescription(request.description().isEmpty() ? null : request.description());
         }
 
+        Set<String> cacheKeySet = new HashSet<>();
+        cacheKeySet.addAll(redisTemplate.keys("project::"+projectId+"*"));
+        List<Long> memberIds = project.getMembersList().stream().map(x -> x.getId()).collect(Collectors.toList());
+        for (Long id : memberIds){
+            cacheKeySet.addAll(redisTemplate.keys("projects::"+id+"*"));
+        }
+        if (!cacheKeySet.isEmpty()){
+            redisTemplate.delete(cacheKeySet);
+        }
+
         return projectMapper.toResponse(project);
     }
 
@@ -190,6 +239,17 @@ public class ProjectService {
         if (!project.getOwner().getId().equals(currentUserId)) {
             throw new AccessDeniedException("You are not the owner of this project");
         }
+
+        Set<String> cacheKeySet = new HashSet<>();
+        cacheKeySet.addAll(redisTemplate.keys("project::"+projectId+"*"));
+        List<Long> memberIds = project.getMembersList().stream().map(x -> x.getId()).collect(Collectors.toList());
+        for (Long id : memberIds){
+            cacheKeySet.addAll(redisTemplate.keys("projects::"+id+"*"));
+        }
+        if (!cacheKeySet.isEmpty()){
+            redisTemplate.delete(cacheKeySet);
+        }
+
         projectRepository.deleteAllMembers(projectId);
         projectRepository.delete(project);
     }
@@ -209,6 +269,14 @@ public class ProjectService {
             throw new IllegalArgumentException("User is not member of this project");
         }
         
+
+        Set<String> cacheKeySet = redisTemplate.keys("projects::" + currentUserId + "*");
+        if (cacheKeySet != null && !cacheKeySet.isEmpty()){
+            redisTemplate.delete(cacheKeySet);
+        }
+        String cacheKey = "project::" + projectId + "_" + currentUserId;
+        redisTemplate.delete(cacheKey);
+
         projectRepository.deleteMember(projectId,userId);
     }
 

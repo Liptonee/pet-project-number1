@@ -46,6 +46,7 @@ taskManager\database\repository\TaskRepository.class
 taskManager\web\dto\request\RefreshTokenDto.class
 taskManager\web\security\jwt\JwtService.class
 taskManager\web\exception\GlobalExceptionHandler.class
+taskManager\database\RedisConfig.class
 taskManager\web\exception\ErrorResponse.class
 taskManager\web\dto\request\Comment.class
 taskManager\database\entity\TaskStatus.class

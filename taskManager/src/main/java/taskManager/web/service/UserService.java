@@ -1,5 +1,7 @@
 package taskManager.web.service;
 
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,6 +26,7 @@ import taskManager.web.dto.request.User;
 import taskManager.web.dto.request.UserPatch;
 import taskManager.web.dto.response.PageResponse;
 import taskManager.web.dto.response.UserResponse;
+import taskManager.web.dto.response.UsernameResponse;
 import taskManager.web.exception.DuplicateResourceException;
 import taskManager.web.exception.ResourceNotFoundException;
 
@@ -63,6 +66,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value="user", key = "#userId")
     public UserResponse getProfile(Long userId
     ){
         log.info("From SERVICE called getProfile");
@@ -86,7 +90,7 @@ public class UserService {
     }
 
     @Transactional(readOnly=true)
-    public PageResponse<UserResponse> getAllUsersFromProject(Long currentUserId,
+    public PageResponse<UsernameResponse> getAllUsersFromProject(Long currentUserId,
             Long projectId,
             Long taskId,
             Pageable pageable
@@ -105,10 +109,11 @@ public class UserService {
         BooleanBuilder builder = new BooleanBuilder();
 
         builder.and(user.participatedProjectsList.any().id.eq(projectId));
+        
         if(taskId != null) builder.and(user.tasksList.any().id.eq(taskId));
 
         Page<UserEntity> page = userRepository.findAll(builder, pageable);
-        return pageMapper.toPageResponse(page, userMapper::toResponse);
+        return pageMapper.toPageResponse(page,userMapper::toUsernameResponse);
     }
 
     @Transactional(readOnly=true)
@@ -134,6 +139,7 @@ public class UserService {
     }
 
     @Transactional
+    @CachePut(value = "user", key = "#currentUserId")
     public UserResponse updateUser(Long currentUserId, UserPatch request
     ){
         log.info("From SERVICE called updateUser");
