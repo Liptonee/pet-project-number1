@@ -36,6 +36,7 @@ C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\dto
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\dto\response\PageResponse.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\dto\response\ProjectResponse.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\dto\response\TaskResponse.java
+C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\dto\response\UsernameResponse.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\dto\response\UserResponse.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\exception\ApiException.java
 C:\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\web\exception\DuplicateResourceException.java

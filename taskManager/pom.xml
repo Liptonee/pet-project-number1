@@ -165,7 +165,13 @@
             <classifier>jakarta</classifier>
             <scope>provided</scope>
         </dependency>
-        
+
+
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
 
         <!-- Документация API - самая свежая версия -->
         <dependency>
@@ -174,7 +180,7 @@
             <version>3.0.1</version>
         </dependency>
 
-        <!-- Redis кэщ -->
+        <!-- Redis кэш -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
