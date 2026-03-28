@@ -1,4 +1,3 @@
-# Используем официальный образ OpenJDK 21 (LTS)
 FROM eclipse-temurin:25-jre-alpine
 
 # Устанавливаем рабочую директорию

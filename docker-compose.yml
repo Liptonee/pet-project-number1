@@ -56,7 +56,7 @@ services:
       retries: 5
 
   taskmanager:
-    build: .
+    build: ./taskManager
     container_name: taskmanager
     depends_on:
       postgres:
@@ -76,6 +76,16 @@ services:
       JWT_SECRET: xq9hN0hOSGidtbfFNfAa7biC42KAvI20k17C4MW2JT2
     ports:
       - "8080:8080"
+  notification:
+    build: ./notificationService
+    container_name: notification
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    ports:
+      - "8081:8081"
 
 volumes:
   postgres_data:

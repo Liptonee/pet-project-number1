@@ -103,6 +103,7 @@ public class ProjectService {
     } 
 
       
+    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     public PageResponse<ProjectResponse> getAllProjects(Long currentUserId,
             Boolean isOwner,

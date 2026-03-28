@@ -16,6 +16,7 @@ import taskManager.database.entity.QTaskEntity;
 import taskManager.database.entity.TaskEntity;
 import taskManager.database.entity.TaskPriority;
 import taskManager.database.entity.TaskStatus;
+import taskManager.database.entity.UserEntity;
 import taskManager.database.repository.ProjectRepository;
 import taskManager.database.repository.TaskRepository;
 import taskManager.database.repository.UserRepository;
@@ -28,7 +29,7 @@ import taskManager.web.dto.response.PageResponse;
 import taskManager.web.dto.response.TaskResponse;
 import taskManager.web.exception.DuplicateResourceException;
 import taskManager.web.exception.ResourceNotFoundException;
-
+import taskManager.kafka.KafkaProducerService;
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -41,6 +42,7 @@ public class TaskService {
     private final ProjectRepository projectRepository;
     private final PageMapper pageMapper;
     private final UserRepository userRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public TaskResponse createTask(Long currentUserId, Long projectId, Task request
@@ -165,9 +167,9 @@ public class TaskService {
     }
 
     @Transactional
-    public void addExecutorToTask(Long currentUserId, Long taskId, Long userId
+    public void addExecutor(Long currentUserId, Long taskId, Long userId
     ){
-        log.info("From SERVICE called addExecutorToTask");
+        log.info("From SERVICE called addExecutor");
 
         //exist
         TaskEntity task = taskRepository.findById(taskId).orElseThrow(
@@ -177,9 +179,9 @@ public class TaskService {
             throw new AccessDeniedException("You are not owner of this project");
         }
         //exist
-        if(!userRepository.existsById(userId)){
-            throw new ResourceNotFoundException("User doesn't exist with id = " + userId);
-        }
+        UserEntity user = userRepository.findById(userId).orElseThrow(
+            () -> new ResourceNotFoundException("User doesn't exist with id = " + taskId)
+        );
         //member
         if(!projectRepository.existsByIdAndMemberId(task.getProject().getId(), userId)){
             throw new IllegalArgumentException("User is not member of this project");
@@ -189,6 +191,7 @@ public class TaskService {
             throw new DuplicateResourceException("User is already executor");
         }
 
+        kafkaProducerService.sendExecutorAddedEvent(user, task);
         taskRepository.addExecutor(taskId, userId);
     }
 

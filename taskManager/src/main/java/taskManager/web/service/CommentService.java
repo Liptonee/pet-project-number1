@@ -1,5 +1,6 @@
 package taskManager.web.service;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,6 +19,7 @@ import taskManager.database.repository.CommentRepository;
 import taskManager.database.repository.ProjectRepository;
 import taskManager.database.repository.TaskRepository;
 import taskManager.database.repository.UserRepository;
+import taskManager.kafka.KafkaProducerService;
 import taskManager.mapper.CommentMapper;
 import taskManager.mapper.PageMapper;
 import taskManager.web.dto.request.Comment;
@@ -37,6 +39,8 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final CommentRepository commentRepository;
     private final PageMapper pageMapper;
+    private final KafkaProducerService kafkaProducerService;
+
 
     @Transactional
     public CommentResponse createComment(Long currentUserId, Long taskId, Comment request
@@ -61,6 +65,7 @@ public class CommentService {
         commentEntity.setUser(user);
 
         CommentEntity saved = commentRepository.save(commentEntity);
+        kafkaProducerService.sendCommentCreatedEvent(saved.getMessage(), task, user.getUsername(), currentUserId);
 
         return commentMapper.toResponse(saved);
     }

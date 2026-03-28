@@ -31,7 +31,8 @@ import lombok.ToString;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @ToString(exclude = {"commentsList", "executorsList"})
-@Table(name = "tasks")
+@Table(name = "tasks", indexes = {
+    @Index(name = "idx_tasks_deadline", columnList = "deadline")})
 @Entity
 public class TaskEntity {
     

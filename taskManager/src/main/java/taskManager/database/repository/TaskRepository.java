@@ -1,5 +1,8 @@
 package taskManager.database.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,5 +29,8 @@ public interface  TaskRepository extends JpaRepository<TaskEntity, Long>,
     @Modifying
     @Query(value = "DELETE FROM user_tasks WHERE task_id = :taskId AND user_id = :userId", nativeQuery = true)
     void deleteExecutor(@Param("taskId") Long taskId, @Param("userId") Long userId);
+
+    @Query("SELECT t FROM TaskEntity t WHERE t.deadline BETWEEN :start AND :end AND t.status != 'DONE'")
+    List<TaskEntity> findAllTasksWithDeadlineInRange(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
 }

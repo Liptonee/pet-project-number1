@@ -130,7 +130,7 @@ public class TaskController {
             @Valid @RequestBody AddUserRequest request
     ){
         log.info("From CONTROLLER called addExecutorToTask");
-        taskService.addExecutorToTask(currentUser.user().getId(), taskId, request.userId());
+        taskService.addExecutor(currentUser.user().getId(), taskId, request.userId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

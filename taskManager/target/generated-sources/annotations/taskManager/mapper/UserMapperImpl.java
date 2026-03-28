@@ -9,8 +9,8 @@ import taskManager.web.dto.response.UsernameResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-23T21:09:12+0700",
-    comments = "version: 1.7.0.Beta1, compiler: javac, environment: Java 25.0.2 (Eclipse Adoptium)"
+    date = "2026-03-28T20:45:35+0700",
+    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -25,8 +25,8 @@ public class UserMapperImpl implements UserMapper {
 
         userEntity.setEmail( dto.email() );
         userEntity.setPassword( dto.password() );
-        userEntity.setUsername( dto.username() );
         userEntity.setPrivateProfile( dto.privateProfile() );
+        userEntity.setUsername( dto.username() );
 
         return userEntity;
     }
