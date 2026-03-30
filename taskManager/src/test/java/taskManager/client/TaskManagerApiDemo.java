@@ -1,4 +1,4 @@
-package taskManager.client;  // выберите свой пакет
+package taskManager.client;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
+import lombok.Getter;
+import lombok.Setter;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -122,6 +124,8 @@ public class TaskManagerApiDemo {
 
     //Упрощённые dto
     //requests
+    @Getter
+    @Setter
     public static class UserRegistrationRequest {
 
         private String email;
@@ -137,6 +141,8 @@ public class TaskManagerApiDemo {
         }
     }
 
+    @Getter
+    @Setter
     public static class UserCredentialRequest {
 
         private String email;
@@ -148,6 +154,8 @@ public class TaskManagerApiDemo {
         }
     }
 
+    @Getter
+    @Setter
     public static class ProjectCreateRequest {
 
         private String name;
@@ -159,6 +167,8 @@ public class TaskManagerApiDemo {
         }
     }
 
+    @Getter
+    @Setter
     public static class TaskCreateRequest {
 
         private String name;
@@ -174,9 +184,11 @@ public class TaskManagerApiDemo {
         }
     }
 
+    @Getter
+    @Setter
     public static class CommentCreateRequest {
 
-        private String message;
+        private final String message;
 
         public CommentCreateRequest(String message) {
             this.message = message;
@@ -223,6 +235,8 @@ public class TaskManagerApiDemo {
         }
     }
 
+    @Getter
+    @Setter
     public static class ProjectResponse {
 
         private Long id;
@@ -231,25 +245,6 @@ public class TaskManagerApiDemo {
         private Long owner_id;
         private String createdAt;
 
-        public Long getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Long getOwner_id() {
-            return owner_id;
-        }
-
-        public String getCreatedAt() {
-            return createdAt;
-        }
     }
 
     public static class TaskResponse {

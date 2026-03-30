@@ -9,11 +9,13 @@ C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\repository\ProjectRepository.java
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\repository\TaskRepository.java
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\database\repository\UserRepository.java
-C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\CommentCreatedEvent.java
-C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\DeadlineApproachingEvent.java
-C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\ExecutorAddedEvent.java
+C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\DeadlineScheduler.java
+C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\event\CommentCreatedEvent.java
+C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\event\DeadlineApproachingEvent.java
+C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\event\ExecutorAddedEvent.java
+C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\event\MemberAddedEvent.java
+C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\KafkaProducerService.java
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\KafkaTopicConfig.java
-C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\kafka\MemberAddedEvent.java
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\mapper\CommentMapper.java
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\mapper\PageMapper.java
 C:\Users\ivan\Desktop\VS Projects\pet-project-number1\taskManager\src\main\java\taskManager\mapper\ProjectMapper.java

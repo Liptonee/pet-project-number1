@@ -12,8 +12,8 @@ import taskManager.web.dto.response.TaskResponse;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-28T20:45:35+0700",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
+    date = "2026-03-30T21:03:22+0700",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 25.0.2 (Eclipse Adoptium)"
 )
 @Component
 public class TaskMapperImpl implements TaskMapper {
@@ -53,9 +53,9 @@ public class TaskMapperImpl implements TaskMapper {
 
         TaskEntity taskEntity = new TaskEntity();
 
-        taskEntity.setDeadline( dto.deadline() );
-        taskEntity.setDescription( dto.description() );
         taskEntity.setName( dto.name() );
+        taskEntity.setDescription( dto.description() );
+        taskEntity.setDeadline( dto.deadline() );
         taskEntity.setPriority( dto.priority() );
 
         return taskEntity;

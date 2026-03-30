@@ -22,6 +22,7 @@ import taskManager.database.entity.QProjectEntity;
 import taskManager.database.entity.UserEntity;
 import taskManager.database.repository.ProjectRepository;
 import taskManager.database.repository.UserRepository;
+import taskManager.kafka.KafkaProducerService;
 import taskManager.mapper.PageMapper;
 import taskManager.mapper.ProjectMapper;
 import taskManager.web.dto.request.Project;
@@ -42,6 +43,7 @@ public class ProjectService {
     private final UserRepository userRepository;
     private final PageMapper pageMapper;
     private final RedisTemplate<String,Object> redisTemplate;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public ProjectResponse createProject(Long currentUserId, Project projectRequest
@@ -170,23 +172,22 @@ public class ProjectService {
     ){
         log.info("From SERVICE called addMemberToProject");
         //exist
-        if(!projectRepository.existsById(projectId)){
-            throw new ResourceNotFoundException("Project not found with id = " + projectId);
-        }
+        ProjectEntity project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project not found with id = " + projectId));
         //owner
         if(!projectRepository.existsByIdAndOwnerId(projectId, currentUserId)){
             throw new AccessDeniedException("You are not the owner of this project");
         }
         //exist
-        if(!userRepository.existsById(userId)){
-            throw new ResourceNotFoundException("User not found with id = " + userId);
-        }
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id = " + userId));
         //duplicate
         if(projectRepository.existsByIdAndMemberId(projectId, userId)){
             throw new DuplicateResourceException("User is already member");
         }
 
         projectRepository.addMember(projectId, userId);
+        kafkaProducerService.sendMemberAddedEvent(user.getEmail(), project.getName());
     }
 
     @Transactional
